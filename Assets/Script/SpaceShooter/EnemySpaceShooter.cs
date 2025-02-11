@@ -11,11 +11,18 @@ public class EnemySpaceShooter : MonoBehaviour
     private float storedFireRate;
     public float BulletSpeed;
     public GameObject BulletPrefab;
-
+    public BulletPool bulletPool;
+    public BulletPoo bulletPoo;
     public float moveSpeed;
     public float moveInterval;
 
     public Vector3 InitialPosition;
+
+    private void Awake()
+    {
+        bulletPool = FindFirstObjectByType<BulletPool>();
+        bulletPoo = FindFirstObjectByType<BulletPoo>();
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -56,14 +63,15 @@ public class EnemySpaceShooter : MonoBehaviour
                 SpaceShip.score++;
                 gameObject.SetActive(false);
             }
-            Destroy(collision.gameObject);
+            bulletPool.ReturnBullet(collision.gameObject);
         }
     }
 
     public void SpawnBullet()
     {
         //Instantiate to clone a game object
-        GameObject bullet = Instantiate(BulletPrefab,transform.position, Quaternion.identity);
+        GameObject bullet = bulletPoo.GetBullet();
+        bullet.transform.position = transform.position;
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
         bulletRb.linearVelocity = new Vector2(0f, -BulletSpeed);
     }

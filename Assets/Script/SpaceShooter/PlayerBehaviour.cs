@@ -6,8 +6,15 @@ public class PlayerBehaviour : MonoBehaviour
 {
     public float Speed;
     public int healthPoints;
+    public BulletPoo bulletPoo;
     public TextMeshProUGUI healthText;
     public GameObject gameOverScreen;
+
+    private void Awake()
+    {
+        bulletPoo = FindFirstObjectByType<BulletPoo>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +50,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (collision.CompareTag("PowerUp"))
         {
             healthPoints++;
-            Destroy(collision.gameObject);
+            bulletPoo.ReturnBullet(collision.gameObject);
         }
     }
 

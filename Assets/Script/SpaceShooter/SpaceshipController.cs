@@ -9,7 +9,7 @@ public class SpaceshipController : MonoBehaviour
 
     public float Speed;
     public float BulletSpeed;
-    public GameObject bulletPrefab;
+    public BulletPool bulletPool;
     public Transform BulletSpawnHere;
     public GameObject GameClearScreen;
     public TextMeshProUGUI textValue,hpValue;
@@ -21,6 +21,11 @@ public class SpaceshipController : MonoBehaviour
     private bool canMove = true;
     private bool canShoot = true;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        bulletPool = FindFirstObjectByType<BulletPool>();
+    }
     void Start()
     {
         storeHP = hitponts;
@@ -65,7 +70,8 @@ public class SpaceshipController : MonoBehaviour
     public void SpawnBullet()
     {
         //Instantiate to clone a game object
-        GameObject bullet = Instantiate(bulletPrefab, BulletSpawnHere.position, Quaternion.identity);
+        GameObject bullet = bulletPool.GetBullet();
+        bullet.transform.position = BulletSpawnHere.position;
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
         bulletRb.linearVelocity = new Vector2(0f, BulletSpeed);
 
